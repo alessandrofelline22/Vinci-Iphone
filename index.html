@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vincitore del Giorno!</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            transition: background-color 0.5s ease;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 450px;
+        }
+        h1 { color: #1877f2; margin-bottom: 10px; }
+        p { color: #606770; font-size: 16px; }
+        .btn {
+            background-color: #00a400;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        /* Schermata Hacker */
+        .hacked-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: left;
+            overflow-y: auto;
+        }
+        .warning { color: #ff0000; font-weight: bold; font-size: 24px; text-transform: uppercase; }
+        .info-list { margin-top: 20px; font-size: 18px; line-height: 1.6; }
+        .footer-msg { margin-top: 40px; color: #ffffff; font-size: 20px; border-top: 1px solid #333; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <!-- Schermata Esca -->
+    <div class="container" id="bait">
+        <h1>🎉 COMPLIMENTI! 🎉</h1>
+        <p>Sei stato selezionato per ricevere un **iPhone 16 Pro** in regalo!</p>
+        <p>Clicca sul pulsante qui sotto per riscattare il tuo premio prima dello scadere del tempo.</p>
+        <button class="btn" onclick="avviaScherzo()">RISCATTA ORA</button>
+    </div>
+
+    <!-- Schermata Simulazione Attacco -->
+    <div class="hacked-screen" id="hackerPage">
+        <div class="warning">⚠️ ACCESSO NON AUTORIZZATO RILEVATO ⚠️</div>
+        <p>[...] Connessione remota stabilita con successo.</p>
+        <p>[...] Download dati sensibili in corso...</p>
+        
+        <div class="info-list">
+            <p><strong>> DISPOSITIVO RILEVATO:</strong> <span id="browser-info"></span></p>
+            <p><strong>> SISTEMA OPERATIVO:</strong> <span id="os-info"></span></p>
+            <p><strong>> DATA E ORA ATTACCO:</strong> <span id="time-info"></span></p>
+            <p><strong>> STATO FOTOCAMERA:</strong> <span style="color: #ff3333;">ACQUISIZIONE FOTO IN CORSO... </span></p>
+        </div>
+
+        <div class="footer-msg">
+             ORA SONO IN POSSESSO DEI TUI DATI <br><br>
+                    </div>
+    </div>
+
+    <script>
+        function avviaScherzo() {
+            // Nasconde l'esca e mostra lo schermo hacker
+            document.getElementById('bait').style.display = 'none';
+            document.getElementById('hackerPage').style.display = 'block';
+            document.body.style.backgroundColor = '#000000';
+
+            // Rileva informazioni reali del browser
+            var userAgent = navigator.userAgent;
+            var os = "Sconosciuto";
+            var browser = "Sconosciuto";
+
+            // Rilevamento OS semplice
+            if (userAgent.indexOf("Windows") !== -1) os = "Windows";
+            else if (userAgent.indexOf("Macintosh") !== -1) os = "macOS";
+            else if (userAgent.indexOf("Android") !== -1) os = "Android";
+            else if (userAgent.indexOf("iPhone") !== -1) os = "iOS (iPhone)";
+
+            // Rilevamento Browser semplice
+            if (userAgent.indexOf("Chrome") !== -1) browser = "Google Chrome";
+            else if (userAgent.indexOf("Safari") !== -1) browser = "Safari";
+            else if (userAgent.indexOf("Firefox") !== -1) browser = "Mozilla Firefox";
+            else if (userAgent.indexOf("Edg") !== -1) browser = "Microsoft Edge";
+
+            // Inserisce i dati veri nella pagina
+            document.getElementById('os-info').innerText = os;
+            document.getElementById('browser-info').innerText = browser;
+            document.getElementById('time-info').innerText = new Date().toLocaleString('it-IT');
+        }
+    </script>
+</body>
+</html>
