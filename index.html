@@ -51,9 +51,22 @@
             text-align: left;
             overflow-y: auto;
         }
-        .warning { color: #ff0000; font-weight: bold; font-size: 24px; text-transform: uppercase; }
-        .info-list { margin-top: 20px; font-size: 18px; line-height: 1.6; }
-        .footer-msg { margin-top: 40px; color: #ffffff; font-size: 20px; border-top: 1px solid #333; padding-top: 20px; }
+        .warning { color: #ff0000; font-weight: bold; font-size: 24px; text-transform: uppercase; margin-bottom: 15px;}
+        .info-list { margin-top: 15px; font-size: 16px; line-height: 1.4; }
+        
+        /* Box Video Telecamera */
+        #camera-feed {
+            width: 100%;
+            max-width: 320px;
+            height: auto;
+            border: 2px solid #00ff00;
+            margin-top: 15px;
+            display: none;
+            background-color: #222;
+            transform: scaleX(-1); /* Effetto specchio naturale */
+        }
+
+        .footer-msg { margin-top: 30px; color: #ffffff; font-size: 18px; border-top: 1px solid #333; padding-top: 15px; }
     </style>
 </head>
 <body>
@@ -62,56 +75,74 @@
     <div class="container" id="bait">
         <h1>🎉 COMPLIMENTI! 🎉</h1>
         <p>Sei stato selezionato per ricevere un **iPhone 16 Pro** in regalo!</p>
-        <p>Clicca sul pulsante qui sotto per riscattare il tuo premio prima dello scadere del tempo.</p>
+        <p>Clicca sul pulsante qui sotto per verificare la tua identità e riscattare il premio.</p>
         <button class="btn" onclick="avviaScherzo()">RISCATTA ORA</button>
     </div>
 
     <!-- Schermata Simulazione Attacco -->
     <div class="hacked-screen" id="hackerPage">
-        <div class="warning">⚠️ ACCESSO NON AUTORIZZATO RILEVATO ⚠️</div>
-        <p>[...] Connessione remota stabilita con successo.</p>
-        <p>[...] Download dati sensibili in corso...</p>
+        <div class="warning">⚠️ ACCESSO NON AUTORIZZATO ⚠️</div>
+        <p>[...] Connessione remota stabilita...</p>
+        <p>[...] Intercettazione flussi multimediali...</p>
         
+        <!-- Elemento Video che mostra la telecamera in diretta -->
+        <video id="camera-feed" autoplay playsinline muted></video>
+
         <div class="info-list">
-            <p><strong>> DISPOSITIVO RILEVATO:</strong> <span id="browser-info"></span></p>
-            <p><strong>> SISTEMA OPERATIVO:</strong> <span id="os-info"></span></p>
-            <p><strong>> DATA E ORA ATTACCO:</strong> <span id="time-info"></span></p>
-            <p><strong>> STATO FOTOCAMERA:</strong> <span style="color: #ff3333;">ACQUISIZIONE FOTO IN CORSO... </span></p>
+            <p><strong>> DISPOSITIVO:</strong> <span id="browser-info"></span> (<span id="os-info"></span>)</p>
+            <p><strong>> DATA/ORA:</strong> <span id="time-info"></span></p>
+            <p><strong>> STREAMING TELECAMERA:</strong> <span id="cam-status" style="color: #ffcc00;">RICHIESTA ACCESSO...</span></p>
         </div>
 
         <div class="footer-msg">
-             ORA SONO IN POSSESSO DEI TUI DATI <br><br>
-                    </div>
+            🛑 **QUESTO ERA UNO SCHERZO EDUCATIVO!** 🛑<br><br>
+            Hai visto? Quando hai cliccato, il sito ti ha chiesto il permesso per la fotocamera. Se avessi cliccato "Consenti" su un sito truffa vero, un hacker avrebbe potuto vederti o scattarti foto a tua insaputa.<br>
+            **Non dare mai i permessi della fotocamera a siti sconosciuti!**
+        </div>
     </div>
 
     <script>
         function avviaScherzo() {
-            // Nasconde l'esca e mostra lo schermo hacker
+            // Mostra la schermata hacker
             document.getElementById('bait').style.display = 'none';
             document.getElementById('hackerPage').style.display = 'block';
             document.body.style.backgroundColor = '#000000';
 
-            // Rileva informazioni reali del browser
+            // Rileva informazioni del dispositivo
             var userAgent = navigator.userAgent;
             var os = "Sconosciuto";
             var browser = "Sconosciuto";
 
-            // Rilevamento OS semplice
             if (userAgent.indexOf("Windows") !== -1) os = "Windows";
             else if (userAgent.indexOf("Macintosh") !== -1) os = "macOS";
             else if (userAgent.indexOf("Android") !== -1) os = "Android";
-            else if (userAgent.indexOf("iPhone") !== -1) os = "iOS (iPhone)";
+            else if (userAgent.indexOf("iPhone") !== -1) os = "iOS";
 
-            // Rilevamento Browser semplice
-            if (userAgent.indexOf("Chrome") !== -1) browser = "Google Chrome";
+            if (userAgent.indexOf("Chrome") !== -1) browser = "Chrome";
             else if (userAgent.indexOf("Safari") !== -1) browser = "Safari";
-            else if (userAgent.indexOf("Firefox") !== -1) browser = "Mozilla Firefox";
-            else if (userAgent.indexOf("Edg") !== -1) browser = "Microsoft Edge";
+            else if (userAgent.indexOf("Firefox") !== -1) browser = "Firefox";
 
-            // Inserisce i dati veri nella pagina
             document.getElementById('os-info').innerText = os;
             document.getElementById('browser-info').innerText = browser;
             document.getElementById('time-info').innerText = new Date().toLocaleString('it-IT');
+
+            // ATTIVAZIONE TELECAMERA LOCALE
+            var video = document.getElementById('camera-feed');
+            var statusText = document.getElementById('cam-status');
+
+            // Chiede il permesso e avvia lo streaming video sul display
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
+            .then(function(stream) {
+                statusText.innerText = "CONNESSO (Live Feed)";
+                statusText.style.color = "#00ff00";
+                video.style.display = "block";
+                video.srcObject = stream;
+            })
+            .catch(function(err) {
+                // Se rifiutano il permesso o la cam è bloccata
+                statusText.innerText = "ACCESSO NEGATO (Ottimo! Hai bloccato la minaccia)";
+                statusText.style.color = "#ff3333";
+            });
         }
     </script>
 </body>
